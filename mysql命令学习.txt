@@ -1,0 +1,78 @@
+刷新权限 flush privileges;
+退出数据库 exit;
+创建数据库 create database lwh;
+删除数据库 drop database lwh;
+查看有哪些数据库 show databases;
+进入某个数据库 use lwh;
+查看当前数据库有哪些表 show tables;
+创建表
+create table lwh2(
+     id int not null auto_increment primary key comment '用户ID',
+     name varchar(20) not null comment '用户名',
+     age tinyint not null comment '年龄'
+);
+删除表 drop table lwh;
+修改表名 alter table lwh1 rename lwh;
+查看表 desc lwh;
+添加一个属性到表 alter table lwh add xxx varchar(50) not null;
+修改表属性值 alter table lwh modify user_name varchar(50) not null comment '用户名';
+修改表的属性名称 alter table lwh change age user_age tinyint not null comment '用户年龄';
+
+往表里插入一条数据
+insert into lwh(user_name,user_age,tall,job) values('lwh','18','176.5','web');
+修改表里的一条数据
+update lwh set tall=190 where user_name='刘伟恒';
+update lwh set sex='男' where id=2 or id=4;
+update lwh set sex='男' where id in(2,4);
+update lwh set sex='男' where id between 2 and 4;
+update lwh set user_age=38,job='搬运工' where id=2;
+选择表里的一部分 select user,host,password from user;
+删除表里的一条数据 delete from lwh where id=5;
+删除表里的所有数据 truncate table lwh;
+
+模糊查询 select * from lwh where name like '%ck%';
+
+排序 select * form lwh order by tall asc(升) desc(降);
+最大值 select max(age) from lwh;
+最小值 select min(age) from lwh;
+平均值 select avg(age) from lwh;
+求合 select sum(age) from lwh;
+求个数 select count(age) from lwh;
+用字符连接select concat_ws('@',name,age) from lwh;
+分组 
+select count(*),tall from lwh group by tall;
+select tall from lwh group by tall having count(*)>1;
+
+两张表的查询 select s.name,m.num from student as s,mark as m where s.id=m.stu_id;
+
+
+内连接相当于, 后面条件用where和on都可以   select s.name,m.num from student as s inner join mark as m on s.id=m.stu_id；
+左连接先查出左边student表里有的  select s.name,m.num from student as s left join mark as m on s.id=m.stu_id;
+右连接 先查出右边表mark里有的 select s.name,m.num from student as s right join mark as m on s.id=m.stu_id;
+联合查询两个表一起查 但是字段要对上select * from lwh1 union all select * from lwh2;
+子查询查出有成绩的学员的名字 select * from student where id in(select stu_id from mark);
+限制查询条数 2,1是从第几条后截取一条
+ select * from lwh1 limit 1
+ select * from lwh1 limit 2,1
+ select * from lwh1 order by id desc limit 1 查出最后一条
+ 
+ 
+ 开启事务start transaction;
+ 回滚 rollback;
+ 提交确认事务commit;
+ 
+ 新建一个视图他人使用create view lwh_view(userName,userAge) as select name,age from lwh where id=2;
+ 使用lwh_view这个视图来查询 select userName,userAge from lwh_view;
+ 显示视图show views;
+ 删除视图 drop view lwh_view;
+
+创建一个触发器 当user表插入数据的时候total_num的num加1
+delimiter //
+create trigger xxx after insert on user for each row
+begin
+update total_num set num=num+1 where type=1;
+end //
+delimiter ;
+显示触发器show triggers;
+删除触发器drop trigger xxx;
+
